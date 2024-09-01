@@ -1,4 +1,9 @@
 export interface IUserList {
-    options: Object,
+    options: {
+        sort: Object,
+        select: string,
+        page: number,
+        limit: number
+    },
     query: Object
 }

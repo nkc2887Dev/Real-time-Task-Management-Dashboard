@@ -7,6 +7,7 @@ import { Model } from "mongoose";
 import { CommonService } from "src/utils/common";
 import { IUserList } from "src/@types/user";
 import { DBService } from "src/utils/dbservice";
+import { PaginatedResponse } from "src/@types/common";
 
 @Injectable()
 export class UserService {
@@ -20,12 +21,29 @@ export class UserService {
 
   async createUser(data: CreateUserDto): Promise<User> {
     return this.userModel.create(data);
-  };
+  }
 
-  async userList(data: IUserList): Promise<User[] | any> {
-    const { query, options } = data
-    return this.dbService.getAllDocuments(this.userModel, query, options);
-  };
+  async getUser(id: string): Promise<User> {
+    return this.userModel.findOne({ _id: id }).select("-token -password");
+  }
+
+  async userList(data: IUserList): Promise<PaginatedResponse<User>> {
+    let { query, options } = data;
+    if (data?.options) {
+      options = {
+        ...data.options,
+      };
+      options.sort = data?.options?.sort ? data?.options?.sort : { createdAt: -1 };
+      options.select = "-token -password";
+    }
+    if (data?.query) {
+      query = {
+        ...data.query,
+      };
+    }
+    const users = (await this.dbService.getAllDocuments(this.userModel, query, options)) as PaginatedResponse<User>;
+    return users;
+  }
 
   async loginUser(data: LoginUserDto): Promise<object | any> {
     try {
@@ -43,7 +61,7 @@ export class UserService {
       this.logger.error(`Error - loginuser : `, error);
       throw error;
     }
-  };
+  }
 }
 
 // 8595849995

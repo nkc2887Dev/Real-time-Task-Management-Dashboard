@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Logger, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { LoginUserDto } from "./dto/loginUser.dto";
 import { UserService } from "./user.service";
 import { ResponseBuilder } from "src/utils/response-builder";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { IUserList } from "src/@types/user";
+import { AuthGuard } from "src/helpers/autharisation";
 
 @Controller("users")
 export class UserController {
@@ -53,7 +54,8 @@ export class UserController {
   };
 
   @Post("/list")
-  async list(@Body() bodyData: IUserList, @Res() response: Response) {
+  @UseGuards(AuthGuard)
+  async list(@Body() bodyData: IUserList, @Res() response: Response, @Req() req) {
     try {
       const result = await this.userService.userList(bodyData);
       return this.responseBuilder.responseMessage(true, "All Users fetched successfully", HttpStatus.OK, result, response);

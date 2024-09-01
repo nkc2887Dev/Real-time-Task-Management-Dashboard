@@ -14,4 +14,15 @@ export default () => ({
   },
   SECRET: process.env.SECRET || "myjwtsecret",
   EXPIRES_IN: process.env.EXPIRES_IN || "24h",
+  MYCUSTOMLABELS: {
+    totalDocs: "itemCount",
+    docs: "data",
+    limit: "perPage",
+    page: "currentPage",
+    nextPage: "next",
+    prevPage: "prev",
+    totalPages: "pageCount",
+    pagingCounter: "slNo",
+    meta: "paginator",
+  }
 });

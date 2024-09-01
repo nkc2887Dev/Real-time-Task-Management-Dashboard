@@ -1,9 +1,10 @@
-import { Body, Controller, HttpStatus, Logger, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Post, Res } from "@nestjs/common";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { LoginUserDto } from "./dto/loginUser.dto";
 import { UserService } from "./user.service";
 import { ResponseBuilder } from "src/utils/response-builder";
 import { Response } from "express";
+import { IUserList } from "src/@types/user";
 
 @Controller("users")
 export class UserController {
@@ -29,7 +30,7 @@ export class UserController {
         response,
       );
     }
-  }
+  };
 
   @Post("/login")
   async login(@Body() bodyData: LoginUserDto, @Res() response: Response) {
@@ -44,6 +45,23 @@ export class UserController {
       return this.responseBuilder.responseMessage(
         false,
         "User login Unsuccessfully",
+        HttpStatus.BAD_REQUEST,
+        { error: error.message },
+        response,
+      );
+    }
+  };
+
+  @Post("/list")
+  async list(@Body() bodyData: IUserList, @Res() response: Response) {
+    try {
+      const result = await this.userService.userList(bodyData);
+      return this.responseBuilder.responseMessage(true, "All Users fetched successfully", HttpStatus.OK, result, response);
+    } catch (error) {
+      this.logger.error(error);
+      return this.responseBuilder.responseMessage(
+        false,
+        "User list failed",
         HttpStatus.BAD_REQUEST,
         { error: error.message },
         response,

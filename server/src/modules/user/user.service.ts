@@ -5,6 +5,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./user.schema";
 import { Model } from "mongoose";
 import { CommonService } from "src/utils/common";
+import { IUserList } from "src/@types/user";
+import { DBService } from "src/utils/dbservice";
 
 @Injectable()
 export class UserService {
@@ -13,11 +15,17 @@ export class UserService {
   constructor(
     @InjectModel("User") private userModel: Model<User>,
     private readonly commonService: CommonService,
+    private readonly dbService: DBService,
   ) {}
 
   async createUser(data: CreateUserDto): Promise<User> {
     return this.userModel.create(data);
-  }
+  };
+
+  async userList(data: IUserList): Promise<User[] | any> {
+    const { query, options } = data
+    return this.dbService.getAllDocuments(this.userModel, query, options);
+  };
 
   async loginUser(data: LoginUserDto): Promise<object | any> {
     try {
@@ -35,7 +43,7 @@ export class UserService {
       this.logger.error(`Error - loginuser : `, error);
       throw error;
     }
-  }
+  };
 }
 
 // 8595849995

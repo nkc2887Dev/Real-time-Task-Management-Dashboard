@@ -1,5 +1,7 @@
 import { Schema, Document } from "mongoose";
 import * as bcrypt from "bcrypt";
+import * as mongoosePaginate from "mongoose-paginate-v2";
+import * as idValidator from "mongoose-id-validator";
 
 export interface User extends Document {
   name: string;
@@ -16,7 +18,7 @@ export const UserSchema = new Schema(
     password: { type: String, required: true },
     token: { type: String },
   },
-  { versionKey: false },
+  { timestamps: true, versionKey: false },
 );
 
 UserSchema.pre("save", async function (next) {
@@ -39,3 +41,7 @@ UserSchema.pre(["find", "findOne"], function (next) {
 UserSchema.methods.matchPassword = async function (enteredPassword: string): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+// Add plugins to the schema
+UserSchema.plugin(mongoosePaginate);
+UserSchema.plugin(idValidator);

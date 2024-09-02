@@ -24,5 +24,5 @@ export default () => ({
     totalPages: "pageCount",
     pagingCounter: "slNo",
     meta: "paginator",
-  }
+  },
 });

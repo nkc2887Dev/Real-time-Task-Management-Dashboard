@@ -10,6 +10,7 @@ import { CommonService } from "src/utils/common";
 import configuration from "src/config/configuration";
 import { DBService } from "src/utils/dbservice";
 import * as mongoosePaginate from "mongoose-paginate-v2";
+import { UserRepository } from "./user.repository";
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import * as mongoosePaginate from "mongoose-paginate-v2";
     MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
   ],
   controllers: [UserController],
-  providers: [UserService, ResponseBuilder, CommonService, ConfigService, DBService],
+  providers: [UserService, UserRepository, ResponseBuilder, CommonService, ConfigService, DBService],
 })
 export class UserModule {
   constructor(private configService: ConfigService) {

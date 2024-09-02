@@ -8,6 +8,7 @@ import { CommonService } from "src/utils/common";
 import { IUserList } from "src/@types/user";
 import { DBService } from "src/utils/dbservice";
 import { PaginatedResponse } from "src/@types/common";
+import { UserRepository } from "./user.repository";
 
 @Injectable()
 export class UserService {
@@ -15,16 +16,17 @@ export class UserService {
 
   constructor(
     @InjectModel("User") private userModel: Model<User>,
+    private readonly userRepository: UserRepository,
     private readonly commonService: CommonService,
     private readonly dbService: DBService,
   ) {}
 
   async createUser(data: CreateUserDto): Promise<User> {
-    return this.userModel.create(data);
+    return this.userRepository.create(data);
   }
 
-  async getUser(id: string): Promise<User> {
-    return this.userModel.findOne({ _id: id }).select("-token -password");
+  async getUser(id: string): Promise<User | null> {
+    return this.userRepository.findOne({ _id: id }, { select: "-token -password" });
   }
 
   async userList(data: IUserList): Promise<PaginatedResponse<User>> {
@@ -48,20 +50,18 @@ export class UserService {
   async loginUser(data: LoginUserDto): Promise<object | any> {
     try {
       const { email, password } = data;
-      const user = await this.userModel.findOne({ email }).exec();
+      const user = await this.userRepository.findOne({ email });
       if (!user) return { flag: false, msg: "User not found." };
       const matchedPass = await user.matchPassword(password);
       if (!matchedPass) {
         return { flag: false, msg: "Password not match." };
       }
       const token = await this.commonService.generateToken(user);
-      await this.userModel.findOneAndUpdate({ _id: user._id }, { $set: { token } }, { new: true });
+      await this.userRepository.updateOne({ _id: user._id }, { token });
       return { flag: true, token };
     } catch (error) {
-      this.logger.error(`Error - loginuser : `, error);
+      this.logger.error(`Error - loginUser : `, error);
       throw error;
     }
   }
 }
-
-// 8595849995

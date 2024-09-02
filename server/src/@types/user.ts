@@ -5,5 +5,5 @@ export interface IUserList {
     page: number;
     limit: number;
   };
-  query: object;
+  query: any;
 }

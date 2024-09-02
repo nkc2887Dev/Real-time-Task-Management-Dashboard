@@ -11,7 +11,7 @@ export interface User extends Document {
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
-export const UserSchema = new Schema(
+export const UserSchema = new Schema<User>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -31,17 +31,14 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-// Pre hooks to exclude soft-deleted documents
 UserSchema.pre(["find", "findOne"], function (next) {
   this.where({ deletedAt: { $exists: false }, deletedBy: { $exists: false } });
   next();
 });
 
-// Method to compare the entered password with the hashed password
 UserSchema.methods.matchPassword = async function (enteredPassword: string): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Add plugins to the schema
 UserSchema.plugin(mongoosePaginate);
 UserSchema.plugin(idValidator);

@@ -31,7 +31,7 @@ export class UserController {
         response,
       );
     }
-  };
+  }
 
   @Post("/login")
   async login(@Body() bodyData: LoginUserDto, @Res() response: Response) {
@@ -51,14 +51,20 @@ export class UserController {
         response,
       );
     }
-  };
+  }
 
   @Post("/list")
   @UseGuards(AuthGuard)
   async list(@Body() bodyData: IUserList, @Res() response: Response, @Req() req) {
     try {
       const result = await this.userService.userList(bodyData);
-      return this.responseBuilder.responseMessage(true, "All Users fetched successfully", HttpStatus.OK, result, response);
+      return this.responseBuilder.responseMessage(
+        true,
+        "All Users fetched successfully",
+        HttpStatus.OK,
+        result,
+        response,
+      );
     } catch (error) {
       this.logger.error(error);
       return this.responseBuilder.responseMessage(

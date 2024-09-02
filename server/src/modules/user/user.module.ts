@@ -9,7 +9,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { CommonService } from "src/utils/common";
 import configuration from "src/config/configuration";
 import { DBService } from "src/utils/dbservice";
-import * as mongoosePaginate from 'mongoose-paginate-v2';
+import * as mongoosePaginate from "mongoose-paginate-v2";
 
 @Module({
   imports: [
@@ -28,10 +28,10 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
   providers: [UserService, ResponseBuilder, CommonService, ConfigService, DBService],
 })
 export class UserModule {
-    constructor(private configService: ConfigService) {
-      const myCustomLabels = this.configService.get('MYCUSTOMLABELS');
-      (mongoosePaginate as any).paginate.options = {
-        customLabels: myCustomLabels,
-      };
-    }
+  constructor(private configService: ConfigService) {
+    const myCustomLabels = this.configService.get("MYCUSTOMLABELS");
+    (mongoosePaginate as any).paginate.options = {
+      customLabels: myCustomLabels,
+    };
   }
+}

@@ -30,21 +30,26 @@ export class UserService {
   }
 
   async userList(data: IUserList): Promise<PaginatedResponse<User>> {
-    let { query, options } = data;
-    if (data?.options) {
-      options = {
-        ...data.options,
-      };
-      options.sort = data?.options?.sort ? data?.options?.sort : { createdAt: -1 };
-      options.select = "-token -password";
+    try {
+      let { query, options } = data;
+      if (data?.options) {
+        options = {
+          ...data.options,
+        };
+        options.sort = data?.options?.sort ? data?.options?.sort : { createdAt: -1 };
+        options.select = "-token -password";
+      }
+      if (data?.query) {
+        query = {
+          ...data.query,
+        };
+      }
+      const users = (await this.dbService.getAllDocuments(this.userModel, query, options)) as PaginatedResponse<User>;
+      return users;
+    } catch (error) {
+      this.logger.error(`Error - userList : `, error);
+      throw error;
     }
-    if (data?.query) {
-      query = {
-        ...data.query,
-      };
-    }
-    const users = (await this.dbService.getAllDocuments(this.userModel, query, options)) as PaginatedResponse<User>;
-    return users;
   }
 
   async loginUser(data: LoginUserDto): Promise<object | any> {

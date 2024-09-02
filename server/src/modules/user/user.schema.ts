@@ -1,7 +1,7 @@
 import { Schema, Document } from "mongoose";
 import * as bcrypt from "bcrypt";
-import * as mongoosePaginate from "mongoose-paginate-v2";
-import * as idValidator from "mongoose-id-validator";
+import mongoosePaginate from "mongoose-paginate-v2";
+import idValidator from "mongoose-id-validator";
 
 export interface User extends Document {
   name: string;

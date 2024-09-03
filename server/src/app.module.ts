@@ -7,6 +7,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { UserModule } from "./modules/user/user.module";
 import { JwtModule } from "@nestjs/jwt";
 import { RoleModule } from "./modules/role/role.module";
+import { TaskModule } from "./modules/task/task.module";
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { RoleModule } from "./modules/role/role.module";
       inject: [ConfigService],
     }),
     UserModule,
-    RoleModule
+    RoleModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,13 +7,13 @@ import { InitSeed } from "./seeder";
 import { SeedService } from "./seeder/service";
 
 async function bootstrap() {
-  const port = 7984;
+  const port = 9876;
   const app = await NestFactory.create(AppModule);
 
   app.use(LoggerMiddleware);
   const seedService = app.get(SeedService);
-  const seeds = new InitSeed(seedService)
-  
+  const seeds = new InitSeed(seedService);
+
   app.enableCors();
   app.setGlobalPrefix("api/v1");
   app.useGlobalInterceptors(new TransformInterceptor());

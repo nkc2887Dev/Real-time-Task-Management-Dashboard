@@ -11,6 +11,7 @@ export default () => ({
     DB_DATABASE: process.env.DB_DATABASE || "TaskManagement",
     DB_USERNAME: process.env.DB_PASSWORD || "",
     DB_PASSWORD: process.env.DB_PASSWORD || "",
+    DB_URL: process.env.DB_URL || "",
   },
   SECRET: process.env.SECRET || "myjwtsecret",
   EXPIRES_IN: process.env.EXPIRES_IN || "24h",

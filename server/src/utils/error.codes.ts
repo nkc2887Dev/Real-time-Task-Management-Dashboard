@@ -1,0 +1,13 @@
+export enum ErrorCode {
+  // External API requests
+  EXTERNAL_API_REQUEST_FAILED = 1121,
+  API_AUTH_FAIL = 1141,
+  NEGATIVE_RESPONSE_FROM_API = 1161,
+
+  // Invalid Data
+  INVALID_INPUT_DATA = 1221,
+
+  // Database
+  DB_REQUEST_FAILED = 1300,
+  RECORD_NOT_FOUND = 1321,
+}

@@ -1,7 +1,7 @@
-import { createLogger, format, transports } from 'winston';
-import morgan from 'morgan';
-import moment from 'moment-timezone';
-import { Request, Response, NextFunction } from 'express';
+import { createLogger, format, transports } from "winston";
+import morgan from "morgan";
+import moment from "moment-timezone";
+import { Request, Response, NextFunction } from "express";
 
 const logger = createLogger({
   transports: [
@@ -12,31 +12,31 @@ const logger = createLogger({
             return `${info.stack}`;
           }
           return `${info.message}`;
-        })
+        }),
       ),
     }),
     new transports.File({
-      filename: `logs/error/${moment().format('MMM-DD-YYYY')}.log`,
-      level: 'error',
+      filename: `logs/error/${moment().format("MMM-DD-YYYY")}.log`,
+      level: "error",
       format: format.combine(
-        format.timestamp({ format: 'MMM-DD-YYYY HH:mm:ss' }),
+        format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
         format.align(),
-        format.printf((info) => `${info.level}: ${info.timestamp}: ${info.stack}`)
+        format.printf((info) => `${info.level}: ${info.timestamp}: ${info.stack}`),
       ),
     }),
     new transports.File({
-      filename: `logs/info/${moment().format('MMM-DD-YYYY')}.log`,
-      level: 'info',
+      filename: `logs/info/${moment().format("MMM-DD-YYYY")}.log`,
+      level: "info",
       format: format.combine(
-        format.timestamp({ format: 'MMM-DD-YYYY HH:mm:ss' }),
+        format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
         format.align(),
-        format.printf((info) => `${info.level}: ${info.timestamp}: ${info.message}`)
+        format.printf((info) => `${info.level}: ${info.timestamp}: ${info.message}`),
       ),
     }),
   ],
 });
 
-const morganMiddleware = morgan('dev', {
+const morganMiddleware = morgan("dev", {
   stream: {
     write: (message: string) => logger.info(message.trim()),
   },

@@ -8,6 +8,8 @@ import { UserModule } from "./modules/user/user.module";
 import { JwtModule } from "@nestjs/jwt";
 import { RoleModule } from "./modules/role/role.module";
 import { TaskModule } from "./modules/task/task.module";
+import { config as configDotenv } from "dotenv";
+configDotenv();
 
 @Module({
   imports: [
@@ -21,10 +23,11 @@ import { TaskModule } from "./modules/task/task.module";
         const dbUsername = configService.get<string>("database.DB_USERNAME");
         const dbPassword = configService.get<string>("database.DB_PASSWORD");
 
-        let uri = `mongodb://${dbHost}:${dbPort}/${dbDatabase}`;
-        if (dbUsername && dbPassword) {
-          uri = `mongodb://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
-        }
+        let uri = process.env.DB_URL;
+        // let uri = `mongodb://${dbHost}:${dbPort}/${dbDatabase}`;
+        // if (dbUsername && dbPassword) {
+        //   uri = `mongodb://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
+        // }
         return { uri };
       },
       inject: [ConfigService],

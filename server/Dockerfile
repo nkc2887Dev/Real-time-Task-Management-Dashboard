@@ -1,38 +1,16 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18 AS build
+FROM node:18.20.1-alpine3.19
 
-# Set the working directory
-WORKDIR /app
+RUN addgroup app && adduser -S -G app app
+USER app
 
-# Copy package.json and package-lock.json
+WORKDIR /src/main
+
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+RUN yarn install
 
-# Copy the rest of the application code
-COPY . .
+COPY . . 
 
-# Build the NestJS application
-RUN npm run build
+EXPOSE 7984
 
-# Use a smaller image for production
-FROM node:18-slim
-
-# Set the working directory
-WORKDIR /app
-
-# Copy the built application from the previous stage
-COPY --from=build /app/dist ./dist
-
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install only production dependencies
-RUN npm install --only=production
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Start the application
-CMD ["node", "dist/main"]
+CMD ["yarn", "start"]

@@ -1,5 +1,6 @@
 import { Schema, Document } from "mongoose";
-import * as bcrypt from "bcrypt";
+// import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import mongoosePaginate from "mongoose-paginate-v2";
 import idValidator from "mongoose-id-validator";
 

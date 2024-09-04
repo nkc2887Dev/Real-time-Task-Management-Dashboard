@@ -7,7 +7,7 @@ import { InitSeed } from "./seeder";
 import { SeedService } from "./seeder/service";
 
 async function bootstrap() {
-  const port = 9876;
+  const port = 7984;
   const app = await NestFactory.create(AppModule);
 
   app.use(LoggerMiddleware);
